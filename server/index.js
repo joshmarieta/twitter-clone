@@ -3,7 +3,7 @@ const cors = require('cors');
 const monk = require('monk');
 
 const app = express();
-const db = monk('localhost/meower');
+const db = monk('localhost:5000/meower');
 const mews = db.get('mews');
 
 app.use(cors());
@@ -14,11 +14,6 @@ app.get('/',(req,res)=>{
      message:'Meow to the world'
    });
 });
-//validation
-function isValidMew(mew){
-  return mew.name && mew.name.toString().trim() !== ''&&
-  mew.content && mew.content.toString().trim() !== '';
-}
 
 app.get('/mews',(req,res)=>{
   mews
@@ -27,6 +22,12 @@ app.get('/mews',(req,res)=>{
       res.json(mews);
     });
 });
+
+//validation
+function isValidMew(mew){
+  return mew.name && mew.name.toString().trim() !== ''&&
+  mew.content && mew.content.toString().trim() !== '';
+}
 
 app.post('/mews',(req,res)=>{
  if(isValidMew(req.body)){
